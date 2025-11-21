@@ -94,21 +94,31 @@ npm run dev
 Create a .env file in python-backend/:
 
 SECRET\_KEY=your\_super\_secret\_key
+
 DATABASE\_URL=sqlite:///users.db
+
 CLOUDINARY\_CLOUD\_NAME=your\_cloud\_name
+
 CLOUDINARY\_API\_KEY=your\_api\_key
+
 CLOUDINARY\_API\_SECRET=your\_api\_secret
+
 GEMINI\_API\_KEY=your\_gemini\_key
+
 RATELIMIT\_DEFAULT="200 per day"
 
 
 
 📸 Screenshots
+<img width="2554" height="1404" alt="image" src="https://github.com/user-attachments/assets/0ad06c67-f02e-4e0b-8c0c-120f37dd5ba0" />
+<img width="2558" height="1394" alt="image" src="https://github.com/user-attachments/assets/eb515d80-afa9-427b-a8f1-b122cf5007d3" />
+
 
 Login Page
+<img width="1937" height="1222" alt="image" src="https://github.com/user-attachments/assets/bf7f1a93-e8d5-45ad-962d-294d01ee8441" />
 
 Dark Mode Dashboard
-
+<img width="2559" height="1404" alt="image" src="https://github.com/user-attachments/assets/7949959a-f744-4de5-abc9-c3b770475cf7" />
 
 
 
