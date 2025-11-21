@@ -1,0 +1,113 @@
+2025-11-20 20:41:52,431 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 20:41:52,432 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 20:41:52,433 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 20:41:58,791 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 20:41:58,794 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 20:42:57,312 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 20:42:57] "GET / HTTP/1.1" 200 -
+2025-11-20 20:42:57,344 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 20:42:57] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-20 21:07:03,856 | INFO | werkzeug:97 |  * Detected change in 'X:\\Nerd\\python\\project\\python-backend\\app\\config.py', reloading
+2025-11-20 21:07:04,837 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:07:13,553 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:07:13,555 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:09:30,826 | INFO | werkzeug:97 |  * Detected change in 'X:\\Nerd\\python\\project\\python-backend\\app\\routes_files.py', reloading
+2025-11-20 21:09:31,684 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:28:20,113 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 21:28:20,113 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 21:28:20,114 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:28:26,920 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:28:26,923 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:28:46,894 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='User logged in' | route=/auth/login
+2025-11-20 21:28:46,895 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:28:46] "POST /auth/login HTTP/1.1" 200 -
+2025-11-20 21:30:43,291 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 21:30:43,292 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 21:30:43,293 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:30:50,550 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:30:50,552 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:31:43,633 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 21:31:43,633 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 21:31:43,634 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:31:50,513 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:31:50,515 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:34:23,090 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 21:34:23,090 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 21:34:23,091 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:34:29,779 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:34:29,781 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:36:43,386 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:36:43] "[33mPOST /auth/si HTTP/1.1[0m" 404 -
+2025-11-20 21:36:46,951 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='User signed up' | route=/auth/signup
+2025-11-20 21:36:46,952 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:36:46] "[35m[1mPOST /auth/signup HTTP/1.1[0m" 201 -
+2025-11-20 21:36:56,522 | INFO | app.utils.activity_logger:31 | Activity: user=2 | action='User signed up' | route=/auth/signup
+2025-11-20 21:36:56,522 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:36:56] "[35m[1mPOST /auth/signup HTTP/1.1[0m" 201 -
+2025-11-20 21:37:28,938 | INFO | app.utils.activity_logger:31 | Activity: user=2 | action='User logged in' | route=/auth/login
+2025-11-20 21:37:28,938 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:37:28] "POST /auth/login HTTP/1.1" 200 -
+2025-11-20 21:37:47,177 | INFO | app.utils.activity_logger:31 | Activity: user=2 | action='Fetched all users' | route=/users
+2025-11-20 21:37:47,181 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:37:47] "GET /users HTTP/1.1" 200 -
+2025-11-20 21:38:02,605 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='User logged in' | route=/auth/login
+2025-11-20 21:38:02,605 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:38:02] "POST /auth/login HTTP/1.1" 200 -
+2025-11-20 21:38:12,271 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:38:12] "[31m[1mGET /users HTTP/1.1[0m" 403 -
+2025-11-20 21:39:06,501 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:39:06] "[31m[1mPOST /files/upload HTTP/1.1[0m" 400 -
+2025-11-20 21:39:25,059 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:39:25] "[31m[1mPOST /files/upload HTTP/1.1[0m" 400 -
+2025-11-20 21:40:16,071 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='Uploaded file uUHG7wv3wxeO1l8aQaWRp.avif' | route=/files/upload
+2025-11-20 21:40:16,073 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:40:16] "[35m[1mPOST /files/upload HTTP/1.1[0m" 201 -
+2025-11-20 21:41:10,310 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='Uploaded file BI and Data Analytics.txt' | route=/files/upload
+2025-11-20 21:41:10,311 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:41:10] "[35m[1mPOST /files/upload HTTP/1.1[0m" 201 -
+2025-11-20 21:41:33,771 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:41:33] "[33mPOST /files/2/analyze HTTP/1.1[0m" 404 -
+2025-11-20 21:43:07,583 | INFO | werkzeug:97 |  * Detected change in 'X:\\Nerd\\python\\project\\python-backend\\app\\routes_files.py', reloading
+2025-11-20 21:43:08,344 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:43:15,164 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:43:15,166 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:43:33,271 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:43:33] "GET /files/list HTTP/1.1" 200 -
+2025-11-20 21:48:08,264 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 21:48:08,264 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 21:48:08,265 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 21:48:15,204 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 21:48:15,206 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 21:48:17,154 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 2' | route=/files/2/analyze
+2025-11-20 21:48:17,159 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:48:17] "POST /files/2/analyze HTTP/1.1" 200 -
+2025-11-20 21:50:15,217 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:50:15] "[31m[1mPOST /files/upload HTTP/1.1[0m" 400 -
+2025-11-20 21:50:32,897 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='Uploaded file testimg.jpg' | route=/files/upload
+2025-11-20 21:50:32,898 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:50:32] "[35m[1mPOST /files/upload HTTP/1.1[0m" 201 -
+2025-11-20 21:50:47,282 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 3' | route=/files/3/analyze
+2025-11-20 21:50:47,284 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:50:47] "POST /files/3/analyze HTTP/1.1" 200 -
+2025-11-20 21:53:08,707 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 3' | route=/files/3/analyze
+2025-11-20 21:53:08,709 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:53:08] "POST /files/3/analyze HTTP/1.1" 200 -
+2025-11-20 21:53:20,560 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='Uploaded file test2.jpg' | route=/files/upload
+2025-11-20 21:53:20,562 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:53:20] "[35m[1mPOST /files/upload HTTP/1.1[0m" 201 -
+2025-11-20 21:53:37,332 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 4' | route=/files/4/analyze
+2025-11-20 21:53:37,333 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 21:53:37] "POST /files/4/analyze HTTP/1.1" 200 -
+2025-11-20 21:56:19,213 | INFO | werkzeug:97 |  * Detected change in 'X:\\Nerd\\python\\project\\python-backend\\app\\ai\\vision_api.py', reloading
+2025-11-20 21:56:22,062 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 22:01:30,783 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 22:01:30,784 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 22:01:30,785 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 22:01:37,782 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 22:01:37,784 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 22:01:51,142 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 22:01:51] "[33mPOST /files/li HTTP/1.1[0m" 404 -
+2025-11-20 22:01:53,739 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 22:01:53] "GET /files/list HTTP/1.1" 200 -
+2025-11-20 22:02:21,390 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 4' | route=/files/4/analyze
+2025-11-20 22:02:21,394 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 22:02:21] "POST /files/4/analyze HTTP/1.1" 200 -
+2025-11-20 22:04:44,508 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 22:04:44,509 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 22:04:44,509 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 22:04:50,918 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 22:04:50,920 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 22:04:57,584 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 4' | route=/files/4/analyze
+2025-11-20 22:04:57,588 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 22:04:57] "POST /files/4/analyze HTTP/1.1" 200 -
+2025-11-20 22:05:30,445 | INFO | werkzeug:97 |  * Detected change in 'X:\\Nerd\\python\\project\\python-backend\\app\\check_model.py', reloading
+2025-11-20 22:05:33,440 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 22:08:22,878 | INFO | werkzeug:97 | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-20 22:08:22,878 | INFO | werkzeug:97 | [33mPress CTRL+C to quit[0m
+2025-11-20 22:08:22,879 | INFO | werkzeug:97 |  * Restarting with stat
+2025-11-20 22:08:29,526 | WARNING | werkzeug:97 |  * Debugger is active!
+2025-11-20 22:08:29,529 | INFO | werkzeug:97 |  * Debugger PIN: 986-290-770
+2025-11-20 22:08:58,596 | INFO | app.utils.activity_logger:31 | Activity: user=1 | action='AI Analyzed file 4' | route=/files/4/analyze
+2025-11-20 22:08:58,600 | INFO | werkzeug:97 | 127.0.0.1 - - [20/Nov/2025 22:08:58] "POST /files/4/analyze HTTP/1.1" 200 -
