@@ -47,49 +47,51 @@ Backend:
 
 🚀 Getting Started
 
-1. Prerequisites
+### 1. Prerequisites
 
 * Node.js \& npm
 * Python 3.10+
 * Tesseract OCR (Required for local text extraction)
 
-2. Backend Setup
+### 2. Backend Setup
 
 cd python-backend
 
-# Create virtual environment
+## Create virtual environment
 
 python -m venv venv
 
-# Windows: venv\\Scripts\\activate
+## Windows: 
+venv\\Scripts\\activate
 
-# Mac/Linux: source venv/bin/activate
+## Mac/Linux: 
+source venv/bin/activate
 
-# Install dependencies
+## Install dependencies
 
 pip install -r requirements.txt
 
-# Run the server
+## Run the server
 
 python run.py
 
 
 
-3. Frontend Setup
+### 3. Frontend Setup
 
 cd frontend
 
-# Install dependencies
+## Install dependencies
 
 npm install
 
-# Run the dev server
+## Run the dev server
 
 npm run dev
 
 
 
-🔑 Environment Variables
+## 🔑 Environment Variables
 
 Create a .env file in python-backend/:
 
@@ -109,15 +111,19 @@ RATELIMIT\_DEFAULT="200 per day"
 
 
 
-📸 Screenshots
+## 📸 Screenshots
+
 <img width="2554" height="1404" alt="image" src="https://github.com/user-attachments/assets/0ad06c67-f02e-4e0b-8c0c-120f37dd5ba0" />
+
 <img width="2558" height="1394" alt="image" src="https://github.com/user-attachments/assets/eb515d80-afa9-427b-a8f1-b122cf5007d3" />
 
 
-Login Page
+## Login Page
+
 <img width="1937" height="1222" alt="image" src="https://github.com/user-attachments/assets/bf7f1a93-e8d5-45ad-962d-294d01ee8441" />
 
-Dark Mode Dashboard
+## Dark Mode Dashboard
+
 <img width="2559" height="1404" alt="image" src="https://github.com/user-attachments/assets/7949959a-f744-4de5-abc9-c3b770475cf7" />
 
 
