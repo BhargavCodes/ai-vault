@@ -1,15 +1,22 @@
-# app/ai/ocr_local.py
-import pytesseract
-from PIL import Image
+import google.generativeai as genai
+import os
 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-def extract_text(path: str) -> str:
+def extract_text(image_path: str) -> str:
     """
-    Extract text from image.
-    Returns empty string on OCR failure (safe fallback).
+    Uses Gemini Flash for OCR instead of Tesseract (saves RAM & setup).
     """
     try:
-        img = Image.open(path)
-        return pytesseract.image_to_string(img) or ""
-    except Exception:
+        model = genai.GenerativeModel("gemini-2.5-flash")
+        myfile = genai.upload_file(image_path)
+        
+        response = model.generate_content([
+            myfile,
+            "Extract all readable text from this image strictly. Return only the text."
+        ])
+        
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini OCR Error: {e}")
         return ""
