@@ -32,8 +32,8 @@ const Layout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             
-            {/* Logo - Points to Dashboard now */}
-            <Link to="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition">
+            {/* 👇 FIX: Logo Points to Landing Page (/) */}
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition">
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-2 rounded-lg text-white shadow-lg">
                     <Sparkles size={20} fill="white" />
                 </div>

@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ShieldCheck, Zap, FileText, MessageSquare, ArrowRight, LayoutDashboard, Moon, Sun, Search, User, ShieldAlert, LogOut, ChevronDown } from 'lucide-react';
+import { Sparkles, ShieldCheck, Zap, FileText, MessageSquare, ArrowRight, LayoutDashboard, Moon, Sun, Search, User, ShieldAlert, LogOut, ChevronDown, Settings } from 'lucide-react'; // <--- Added Settings Icon
 import { useAuth } from '../AuthContext';
 import { useTheme } from '../ThemeContext';
-import { motion, useScroll, useTransform } from 'framer-motion'; // <--- IMPORT ANIMATION LIBRARY
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const Landing = () => {
   const { user, logout } = useAuth();
@@ -124,6 +124,11 @@ const Landing = () => {
 
                             <Link to="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400" onClick={() => setIsDropdownOpen(false)}>
                                 <User size={16} /> Profile
+                            </Link>
+
+                            {/* ✨ Added Settings Link */}
+                            <Link to="/settings" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400" onClick={() => setIsDropdownOpen(false)}>
+                                <Settings size={16} /> Settings
                             </Link>
 
                             {user.role === 'admin' && (
