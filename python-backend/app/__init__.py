@@ -6,11 +6,12 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from typing import List, cast
 from flask_cors import CORS 
+from flask_mail import Mail
 
 # --- Global Initialization ---
 db = SQLAlchemy()
 limiter = None
-
+mail = Mail()
 
 # --- Key Function for Rate Limiting ---
 def get_rate_limit_key():
@@ -54,6 +55,7 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
+    mail.init_app(app)
 
     # Rate limiting (Limiter)
     global limiter

@@ -1,0 +1,17 @@
+# Ignore the virtual environment (The 1.3GB culprit)
+lib/
+venv/
+.venv/
+env/
+
+# Ignore cache (junk)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Git
+.git/
+
+# Ignore sensitive files (secrets shouldn't be baked into the image)
+.env

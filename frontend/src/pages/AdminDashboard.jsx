@@ -1,6 +1,7 @@
+// src/pages/AdminDashboard.jsx
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { Trash2, Shield, ShieldAlert, Search, User, ArrowLeft } from 'lucide-react';
+import { Trash2, Shield, ShieldAlert, Search, User, ArrowLeft, Mail, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -47,8 +48,10 @@ const AdminDashboard = () => {
     }
   };
 
+  // ✅ Updated Filter: Searches Name OR Email
   const filteredUsers = users.filter(u => 
-    u.name.toLowerCase().includes(search.toLowerCase())
+    (u.full_name || "").toLowerCase().includes(search.toLowerCase()) ||
+    (u.email || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -58,7 +61,6 @@ const AdminDashboard = () => {
       <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-4">
-                {/* 👇 FIX: Points to Dashboard instead of Landing Page */}
                 <Link to="/dashboard" className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition dark:text-gray-300 dark:hover:bg-gray-700">
                     <ArrowLeft size={20} />
                 </Link>
@@ -90,7 +92,7 @@ const AdminDashboard = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                 <input 
                     type="text" 
-                    placeholder="Search users..." 
+                    placeholder="Search name or email..." 
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-red-500 outline-none transition-all shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:bg-gray-700"
@@ -104,9 +106,9 @@ const AdminDashboard = () => {
                 <table className="w-full text-left">
                     <thead className="bg-gray-50 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600">
                         <tr>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">User</th>
+                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">User Identity</th>
+                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">DOB</th>
                             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">Role</th>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">User ID</th>
                             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right dark:text-gray-400">Actions</th>
                         </tr>
                     </thead>
@@ -122,15 +124,27 @@ const AdminDashboard = () => {
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
                                                 {u.profile_picture ? (
-                                                    <img src={u.profile_picture} className="w-full h-full object-cover" />
+                                                    <img src={u.profile_picture} className="w-full h-full object-cover" alt="avatar" />
                                                 ) : (
                                                     <User size={20} className="text-gray-400 dark:text-gray-500" />
                                                 )}
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-gray-800 dark:text-gray-200">{u.name}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">Age: {u.age}</p>
+                                                {/* ✅ Shows Full Name */}
+                                                <p className="font-semibold text-gray-800 dark:text-gray-200">{u.full_name}</p>
+                                                {/* ✅ Shows Email */}
+                                                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    <Mail size={10} />
+                                                    {u.email}
+                                                </div>
                                             </div>
+                                        </div>
+                                    </td>
+                                    {/* ✅ Shows Date of Birth */}
+                                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
+                                        <div className="flex items-center gap-2">
+                                            <Calendar size={14} className="text-gray-400"/>
+                                            {u.dob || "N/A"}
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
@@ -139,7 +153,6 @@ const AdminDashboard = () => {
                                             {u.role}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500 font-mono dark:text-gray-400">#{u.id}</td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button 

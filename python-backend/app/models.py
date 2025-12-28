@@ -7,34 +7,48 @@ from typing import Optional, Any
 # ========================================================
 ## 👤 User Model
 # ========================================================
+from werkzeug.security import generate_password_hash, check_password_hash
+
 class User(db.Model):
-    """Represents a user in the application."""
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    # Password stores the hashed value (length adjusted for modern hashes)
-    password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default="user")
     
-    # Profile picture URL
+    # 1. New Identity Fields
+    email = db.Column(db.String(120), unique=True, nullable=False)  # <--- Login ID
+    full_name = db.Column(db.String(100), nullable=False)
+    dob = db.Column(db.Date, nullable=True)
+    
+    # 2. Security Fields
+    password_hash = db.Column(db.String(256), nullable=False)
+    role = db.Column(db.String(20), default="user")
+    
+    # 3. OTP Fields (For Forgot Password)
+    reset_otp = db.Column(db.String(6), nullable=True)
+    reset_otp_expiry = db.Column(db.DateTime, nullable=True)
+
+    # 4. Profile
     profile_picture = db.Column(db.String(500), nullable=True)
 
-    def __init__(self, name: str, age: int, password: str,
-                 role: str = "user", profile_picture: Optional[str] = None):
-        self.name = name
-        self.age = age
-        self.password = password
+    def __init__(self, email, password, full_name, dob=None, role="user"):
+        self.email = email
+        self.full_name = full_name
+        self.dob = dob
         self.role = role
-        self.profile_picture = profile_picture
+        self.set_password(password) # Hash immediately on creation
 
-    def to_dict(self) -> dict[str, Any]:
-        """Returns a dictionary representation of the user (excluding password)."""
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
         return {
             "id": self.id,
-            "name": self.name,
-            "age": self.age,
+            "email": self.email,
+            "full_name": self.full_name,
+            "dob": self.dob.isoformat() if self.dob else None,
             "role": self.role,
             "profile_picture": self.profile_picture
         }

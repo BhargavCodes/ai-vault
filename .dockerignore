@@ -1,0 +1,17 @@
+# Ignoring venv
+**/lib
+**/venv
+**/env
+**/.venv
+**/python-backend/lib
+**/python-backend/venv
+
+# Ignore frontend heavy folders
+**/node_modules
+**/dist
+**/build
+
+# Ignore git and cache
+.git
+**/__pycache__
+**/*.pyc

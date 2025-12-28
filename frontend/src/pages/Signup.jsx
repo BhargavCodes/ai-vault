@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import api from '../api'; // We use direct API call here, then redirect
+import api from '../api'; // Direct API call
 import { useNavigate, Link } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, Eye, EyeOff } from 'lucide-react'; // Added Eye icons
 import toast from 'react-hot-toast';
 
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
+  // Updated state variables for new backend requirements
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
   const [password, setPassword] = useState('');
+  
+  // UI States
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const navigate = useNavigate();
@@ -17,10 +22,11 @@ const Signup = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Call Backend Signup
+      // 1. Call Backend Signup with new fields
       await api.post('/auth/signup', { 
-        name, 
-        age: parseInt(age), // Ensure age is a number
+        full_name: fullName, 
+        email: email,
+        dob: dob, // Sends "YYYY-MM-DD" string directly
         password 
       });
       
@@ -50,41 +56,65 @@ const Signup = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          
+          {/* Full Name Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Full Name</label>
             <input
               type="text"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-purple-400"
-              placeholder="Choose a username"
+              placeholder="John Doe"
             />
           </div>
 
+          {/* Email Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Age</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email Address</label>
             <input
-              type="number"
+              type="email"
               required
-              min="1"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-purple-400"
-              placeholder="Your age"
+              placeholder="john@example.com"
             />
           </div>
 
+          {/* Date of Birth Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Date of Birth</label>
+            <input
+              type="date"
+              required
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-purple-400"
+            />
+          </div>
+
+          {/* Password Input with Toggle */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-purple-400"
-              placeholder="Create a password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"} // Dynamic type
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-purple-400 pr-10" // Added pr-10 for icon space
+                placeholder="••••••••"
+              />
+              <button
+                type="button" // Important: prevents form submission
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <button

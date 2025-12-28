@@ -1,7 +1,8 @@
+// src/pages/Profile.jsx
 import { useState, useEffect } from 'react';
 import api from '../api';
 import { useAuth } from '../AuthContext';
-import { User, Camera, Clock, ArrowLeft, Shield, Upload, LogOut } from 'lucide-react'; 
+import { User, Camera, Clock, ArrowLeft, Shield, Upload, LogOut, Mail, Calendar } from 'lucide-react'; 
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -56,20 +57,18 @@ const Profile = () => {
   };
 
   return (
-    // ✨ Added dark:bg-gray-900 and text colors
     <div className="min-h-screen bg-gray-50 font-sans transition-colors duration-200 dark:bg-gray-900 dark:text-gray-100">
       
       {/* Page Header (Sub-nav) */}
       <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-4">
-                <Link to="/" className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition dark:text-gray-300 dark:hover:bg-gray-700">
+                <Link to="/dashboard" className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition dark:text-gray-300 dark:hover:bg-gray-700">
                     <ArrowLeft size={20} />
                 </Link>
                 <h1 className="text-xl font-bold text-gray-800 dark:text-white">User Profile</h1>
             </div>
             
-            {/* Note: Main Logout is in Layout, but keeping this secondary one is fine */}
             <button onClick={logout} className="flex items-center gap-2 text-sm font-medium text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition dark:text-red-400 dark:hover:bg-red-900/20">
                 <LogOut size={18} />
                 <span className="hidden sm:inline">Logout</span>
@@ -109,20 +108,35 @@ const Profile = () => {
                     </label>
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{authUser?.name || "User"}</h2>
-                <div className="flex items-center gap-2 mt-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide dark:bg-blue-900/30 dark:text-blue-300">
+                {/* ✅ Display Full Name */}
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-1">{authUser?.full_name || "User"}</h2>
+                
+                {/* ✅ Display Email */}
+                <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    <Mail size={14} />
+                    {authUser?.email || "No email"}
+                </div>
+
+                <div className="flex items-center gap-2 mt-1 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide dark:bg-blue-900/30 dark:text-blue-300">
                     <Shield size={12} />
                     {authUser?.role || "User"}
                 </div>
 
-                <div className="w-full mt-6 pt-6 border-t border-gray-100 flex justify-between text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
-                    <span>Member since</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">Nov 2025</span>
+                {/* ✅ Extra Details: DOB */}
+                <div className="w-full mt-6 pt-6 border-t border-gray-100 flex flex-col gap-3 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                    <div className="flex justify-between">
+                        <span className="flex items-center gap-2"><Calendar size={14}/> Date of Birth</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">{authUser?.dob || "N/A"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="flex items-center gap-2"><Clock size={14}/> Joined</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Dec 2025</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {/* Right Col: Activity History */}
+        {/* Right Col: Activity History (Unchanged) */}
         <div className="md:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-center gap-2 mb-6">

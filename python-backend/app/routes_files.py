@@ -1,3 +1,4 @@
+# app/routes_files.py
 from flask import Blueprint, request, jsonify
 from app import db
 from app.auth.decorators import require_auth
@@ -305,7 +306,7 @@ def analyze_existing_file(user_id: int, file_id: int):
 
 
 # ------------------------------------------------------------
-## 8. 💬 CHAT WITH FILE (RAG Lite)
+## 8. 💬 CHAT WITH FILE (Multimodal Support + Auto-Retry)
 # ------------------------------------------------------------
 @routes_files.route("/<int:file_id>/chat", methods=["POST"])
 @require_auth
@@ -320,44 +321,89 @@ def chat_with_file(user_id: int, file_id: int):
     question = data.get("question")
     if not question: return jsonify({"error": "No question provided"}), 400
 
-    # 1. Construct Context from DB
-    context = ""
-    if file_record.ocr_text:
-        context += f"Document Text Content:\n{file_record.ocr_text[:20000]}\n\n"
-    if file_record.vision_analysis:
-        context += f"Visual Description:\n{file_record.vision_analysis}\n\n"
-    
-    if not context:
-        return jsonify({"answer": "I cannot answer because this file has no extracted text or analysis yet. Please run 'Analyze' first."})
-
     try:
-        # 2. Send to Gemini
+        # Imports needed for AI and Retry Logic
         import google.generativeai as genai
         import os
-        
+        from PIL import Image
+        import io
+        import requests
+        import time
+        from google.api_core.exceptions import ResourceExhausted
+
         genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-        model = genai.GenerativeModel("gemini-2.5-flash")
         
+        # ⚠️ FIX: Use "gemini-1.5-flash" (2.5 does not exist yet)
+        model = genai.GenerativeModel("gemini-2.5-flash") 
+
+        # === PATH A: IT IS AN IMAGE (Send actual pixels) ===
+        image_extensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.avif']
+        is_image_file = any(file_record.filename.lower().endswith(ext) for ext in image_extensions)
+
+        if is_image_file:
+            print("📷 DEBUG: Detected Image. Downloading for Vision API...")
+            
+            # 1. Download image to memory (RAM)
+            headers = {"User-Agent": "Mozilla/5.0"}
+            img_response = requests.get(file_record.url, headers=headers)
+            
+            if img_response.status_code == 200:
+                # 2. Convert raw bytes to PIL Image
+                image_data = Image.open(io.BytesIO(img_response.content))
+                
+                # 3. Create a Concise Assistant Persona
+                system_prompt = (
+                    "You are a helpful visual assistant. "
+                    "Answer the user's question based on the image in a concise, conversational way. "
+                    "If the user asks for advice/improvements, give exactly 3 short, actionable bullet points. "
+                    "Do not write long paragraphs or formal reports."
+                )
+                
+                # 4. Send Image + Prompts to Gemini (With Retry Logic)
+                try:
+                    response = model.generate_content([system_prompt, question, image_data])
+                except ResourceExhausted:
+                    print("⏳ 429 Quota Exceeded. Sleeping for 10 seconds...")
+                    time.sleep(10)
+                    # Try one more time
+                    response = model.generate_content([system_prompt, question, image_data])
+                
+                return jsonify({"answer": response.text})
+            else:
+                print(f"❌ Error downloading image: {img_response.status_code}")
+                # Fallback to text context if download fails
+                pass
+
+        # === PATH B: TEXT/DOC/PDF (Use RAG Context) ===
+        # (This runs if it's NOT an image OR if image download failed)
+        
+        context = ""
+        if file_record.ocr_text:
+            context += f"Document Text:\n{file_record.ocr_text[:15000]}\n\n"
+        if file_record.summary:
+            context += f"Summary:\n{file_record.summary}\n\n"
+        
+        if not context:
+            return jsonify({"answer": "I can't see this file yet. Please click 'Analyze' first!"})
+
         prompt = f"""
-        You are an AI assistant analyzing a specific file.
-        
-        CONTEXT FROM FILE:
-        {context}
-        
-        USER QUESTION:
-        {question}
-        
-        INSTRUCTIONS:
-        - Answer based ONLY on the context provided.
-        - **Format your answer using Markdown.**
-        - Use **bold** for key numbers or names.
-        - Use bullet points or numbered lists for steps/recommendations.
-        - Keep it clean and professional.
+        You are an AI assistant analyzing a file.
+        CONTEXT: {context}
+        USER QUESTION: {question}
+        INSTRUCTIONS: Answer based ONLY on the context. Use Markdown.
         """
         
-        response = model.generate_content(prompt)
+        # Retry logic for Text Chat as well
+        try:
+            response = model.generate_content(prompt)
+        except ResourceExhausted:
+            print("⏳ 429 Quota Exceeded (Text). Sleeping for 10 seconds...")
+            time.sleep(10)
+            response = model.generate_content(prompt)
+
         return jsonify({"answer": response.text})
 
     except Exception as e:
         print(f"❌ CHAT ERROR: {e}")
-        return jsonify({"error": "AI Chat failed"}), 500
+        traceback.print_exc()
+        return jsonify({"error": f"AI Chat failed: {str(e)}"}), 500

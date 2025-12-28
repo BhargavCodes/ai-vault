@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api';
-import { UploadCloud, Trash2, FileText, Search, Sparkles, RefreshCw, Loader2, X, Eye, MessageSquare, Edit2, Check, Wand2, RotateCcw, Send } from 'lucide-react';
+import { UploadCloud, Trash2, FileText, Search, Sparkles, RefreshCw, Loader2, X, Eye, MessageSquare, Edit2, Check, Wand2, RotateCcw, Send, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // ... (Chat/Modal State - Same as before)
+  // --- Chat & Modal State ---
   const [activeTab, setActiveTab] = useState('details');
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -80,12 +80,12 @@ const Dashboard = () => {
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop, 
-    noClick: true, // 👈 IMPORTANT: Allows buttons inside to be clicked!
+    noClick: true, 
     noKeyboard: true,
     accept: { 'image/*': [], 'application/pdf': [], 'text/plain': [], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [] } 
   });
 
-  // ... (Keep AI, Chat, Delete, Rename logic exactly same as before) ...
+  // --- Actions ---
   const runAI = async (fileId) => {
     setAnalyzing(fileId);
     const loadingToast = toast.loading("Analyzing with AI...");
@@ -149,11 +149,10 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* Wrap the ENTIRE Dashboard in Dropzone */}
       <div {...getRootProps()} className="relative min-h-[80vh] outline-none">
         <input {...getInputProps()} />
 
-        {/* 🔵 Drag Overlay (Only shows when dragging file) */}
+        {/* 🔵 Drag Overlay */}
         {isDragActive && (
             <div className="absolute inset-0 z-50 bg-blue-500/10 border-4 border-blue-500 border-dashed rounded-3xl flex items-center justify-center backdrop-blur-sm transition-all">
                 <div className="bg-white p-8 rounded-full shadow-xl animate-bounce">
@@ -169,11 +168,25 @@ const Dashboard = () => {
                 <input type="text" placeholder="Search files..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
             </div>
             
-            <label className={`flex items-center gap-2 px-6 py-3 rounded-xl cursor-pointer transition-all shadow-md hover:shadow-lg border-2 border-transparent bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600`}>
-                <input type="file" className="hidden" onChange={handleFileInputChange} disabled={uploading} />
-                {uploading ? <RefreshCw className="animate-spin" size={20}/> : <UploadCloud size={20} />}
-                <span className="font-medium">{uploading ? "Uploading..." : "Upload New File"}</span>
-            </label>
+            <div className="flex items-center gap-3">
+                {/* 🛡️ ADMIN BUTTON (Conditional Render) */}
+                {user?.role === 'admin' && (
+                    <Link 
+                        to="/admin-dashboard" 
+                        className="flex items-center gap-2 px-4 py-3 rounded-xl font-bold bg-purple-100 text-purple-700 hover:bg-purple-200 transition dark:bg-purple-900/30 dark:text-purple-300"
+                        title="Go to Admin Console"
+                    >
+                        <ShieldAlert size={20} />
+                        <span className="hidden sm:inline">Admin</span>
+                    </Link>
+                )}
+
+                <label className={`flex items-center gap-2 px-6 py-3 rounded-xl cursor-pointer transition-all shadow-md hover:shadow-lg border-2 border-transparent bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600`}>
+                    <input type="file" className="hidden" onChange={handleFileInputChange} disabled={uploading} />
+                    {uploading ? <RefreshCw className="animate-spin" size={20}/> : <UploadCloud size={20} />}
+                    <span className="font-medium">{uploading ? "Uploading..." : "Upload New File"}</span>
+                </label>
+            </div>
         </div>
 
         {/* Files Grid */}

@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn } from 'lucide-react';
+import { LogIn, Eye, EyeOff } from 'lucide-react'; // Added Eye icons
 
 const Login = () => {
-  const [name, setName] = useState('');
+  // 1. Changed 'name' to 'email' to match backend
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  // UI States
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -18,12 +22,10 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      // Call the login function from our AuthContext
-      await login(name, password);
-      // If successful, go to Dashboard
+      // 2. Pass 'email' instead of 'name'
+      await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      // Show error message from backend or a default one
       setError(err.response?.data?.error || 'Failed to login');
     } finally {
       setIsSubmitting(false);
@@ -49,18 +51,21 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          
+          {/* Email Input (Replaces Username) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email Address</label>
             <input
-              type="text"
+              type="email"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
-              placeholder="Enter your name"
+              placeholder="john@example.com"
             />
           </div>
 
+          {/* Password Input with Toggle */}
           <div>
             <div className="flex justify-between items-center mb-1">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
@@ -68,14 +73,24 @@ const Login = () => {
                     Forgot Password?
                 </Link>
             </div>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
-              placeholder="••••••••"
-            />
+            
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"} // Dynamic type
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400 pr-10"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <button

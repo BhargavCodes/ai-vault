@@ -40,3 +40,11 @@ class Config:
     # --- Rate Limiting Settings (Flask-Limiter) ---
     # Default rate limit applied to unauthenticated endpoints or users
     RATELIMIT_DEFAULT = "200 per hour"
+
+    # 📧 EMAIL CONFIGURATION (Gmail)
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')

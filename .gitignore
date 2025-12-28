@@ -1,0 +1,23 @@
+# --- 🛑 SECRETS (CRITICAL) ---
+.env
+.env.local
+*.env
+
+# --- Docker & Data ---
+postgres_data/
+.DS_Store
+
+# --- Python Global ---
+__pycache__/
+*.py[cod]
+venv/
+.pytest_cache/
+
+# --- Node Global ---
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# --- IDEs ---
+.vscode/
+.idea/
