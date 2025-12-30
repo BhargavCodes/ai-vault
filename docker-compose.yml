@@ -2,7 +2,7 @@ services:
   # 1. Database (Local Postgres for Docker)
   db:
     image: postgres:15
-    restart: always
+    restart: "no"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -16,6 +16,7 @@ services:
   backend:
     build:
       context: ./python-backend
+    image: dockbhargav/ai-vault-backend:v1
     command: gunicorn --bind 0.0.0.0:5000 --workers 3 --timeout 120 "app:create_app()"
     ports:
       - "5000:5000"
@@ -35,6 +36,7 @@ services:
   frontend:
     build:
       context: ./frontend
+    image: dockbhargav/ai-vault-frontend:v1
     ports:
       - "5173:80"
     environment:

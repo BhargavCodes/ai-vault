@@ -1,135 +1,226 @@
-🤖 AI Vault - Smart File Manager
 
-A secure, AI-powered file management system that allows users to upload, analyze, and chat with their documents and images using Google's Gemini 2.5 Flash model.
+# 🤖 AI Vault — Intelligent Cloud Storage Platform
 
-(Replace this link with a screenshot of your actual dashboard later)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlebard&logoColor=white)
 
-✨ Features
+**AI Vault** is a secure, full-stack cloud storage platform that transforms traditional file storage into an **AI-powered knowledge system**.
 
-🧠 AI Capabilities
-
-* Smart Analysis: Automatically detects file types (Images, PDFs, Word Docs).
-* Visual Understanding: Extract tags, captions, and summaries from images.
-* OCR \& Parsing: Extracts text from scanned documents and PDFs.
-* RAG Chat: Chat contextually with any file ("What is the total in this invoice?").
-* Auto-Tagging: AI suggests relevant tags for easy searching.
-
-🛡️ Security \& Core
-
-* Role-Based Access Control (RBAC): Admin vs User roles.
-* Secure Auth: JWT-based authentication with session management.
-* Rate Limiting: Prevents API abuse.
-* Cloud Storage: Integrated with Cloudinary (or S3/Local) for file hosting.
-
-🎨 Modern UI/UX
-
-* Dark Mode: Fully responsive dark/light theme.
-* Drag \& Drop: Intuitive upload interface.
-* Animations: Smooth page transitions using Framer Motion.
-* Toast Notifications: Real-time feedback for user actions.
-
-🛠️ Tech Stack
-
-Frontend:
-
-* React + Vite
-* Tailwind CSS (Styling)
-* Framer Motion (Animations)
-* Axios (API)
-* Lucide React (Icons)
-
-Backend:
-
-* Flask (Python)
-* SQLAlchemy (Database)
-* Google Generative AI (Gemini 2.5 Flash)
-* Cloudinary (Storage)
-
-🚀 Getting Started
-
-### 1. Prerequisites
-
-* Node.js \& npm
-* Python 3.10+
-* Tesseract OCR (Required for local text extraction)
-
-### 2. Backend Setup
-
-cd python-backend
-
-## Create virtual environment
-
-python -m venv venv
-
-## Windows: 
-venv\\Scripts\\activate
-
-## Mac/Linux: 
-source venv/bin/activate
-
-## Install dependencies
-
-pip install -r requirements.txt
-
-## Run the server
-
-python run.py
+Instead of simply storing files, AI Vault enables users to **extract insights, summarize content, generate metadata, and interact with documents using natural language** through Retrieval-Augmented Generation (RAG).
 
 
+---
 
-### 3. Frontend Setup
+## 🏗️ Architecture Overview
 
-cd frontend
+The system is designed using a **containerized, service-oriented architecture**, ensuring scalability, modularity, and ease of deployment.
 
-## Install dependencies
+```mermaid
+graph TD
+  User[User Browser] -->|HTTPS| FE[React Frontend]
+  FE -->|REST APIs| BE[Flask Backend]
+  BE -->|ORM Queries| DB[(PostgreSQL)]
+  BE -->|AI Requests| Gemini[Google Gemini API]
+  BE -->|Media Storage| Cloud[Cloudinary]
+  BE -->|Email OTP| SMTP[Gmail SMTP]
+````
 
-npm install
+---
 
-## Run the dev server
+## ✨ Core Features
 
-npm run dev
+### 🧠 AI-Powered Intelligence
 
+* **Document Chat (RAG):** Ask questions directly to uploaded files
+  *Example: “Summarize this PDF” or “What is the total amount mentioned?”*
+* **OCR Processing:** Extracts text from scanned PDFs and images
+* **Auto-Summarization:** Generates concise summaries for large documents
+* **Smart Tagging:** Automatically generates searchable metadata
+* **Image Understanding:** AI-based captioning and visual analysis
 
+---
 
-## 🔑 Environment Variables
+### 🔐 Security & Access Control
 
-Create a .env file in python-backend/:
+* **JWT Authentication:** Secure stateless authentication with expiration
+* **Role-Based Access Control (RBAC):** User and Admin roles
+* **Admin Console:** Manage users, roles, and platform activity
+* **Secure Password Reset:** Email-based OTP verification
+* **Rate Limiting:** Protects APIs from abuse
 
-SECRET\_KEY=your\_super\_secret\_key
+---
 
-DATABASE\_URL=sqlite:///users.db
+### ⚙️ **Modern DX (Developer Experience)** 
 
-CLOUDINARY\_CLOUD\_NAME=your\_cloud\_name
+* **Dockerized:** One command (docker-compose up) to spin up the entire stack.
+* **Cloud Native:** Database on Neon (Serverless Postgres), Backend on Render.
+* **Responsive:** Fully adaptive Dark/Light mode built with Tailwind CSS.
 
-CLOUDINARY\_API\_KEY=your\_api\_key
+---
 
-CLOUDINARY\_API\_SECRET=your\_api\_secret
+### 🎨 **Modern UI/UX** 
+* **Responsive Design:** Seamless Dark/Light mode support.
+* **Drag & Drop:** Intuitive file upload zone with Framer Motion animations.
+* **Interactive Dashboard:** Real-time toast notifications and skeleton loaders.
 
-GEMINI\_API\_KEY=your\_gemini\_key
-
-RATELIMIT\_DEFAULT="200 per day"
-
-
-
-## 📸 Screenshots
-
-<img width="2554" height="1404" alt="image" src="https://github.com/user-attachments/assets/0ad06c67-f02e-4e0b-8c0c-120f37dd5ba0" />
-
-<img width="2558" height="1394" alt="image" src="https://github.com/user-attachments/assets/eb515d80-afa9-427b-a8f1-b122cf5007d3" />
-
-
-## Login Page
-
-<img width="1937" height="1222" alt="image" src="https://github.com/user-attachments/assets/bf7f1a93-e8d5-45ad-962d-294d01ee8441" />
-
-## Dark Mode Dashboard
-
-<img width="2559" height="1404" alt="image" src="https://github.com/user-attachments/assets/7949959a-f744-4de5-abc9-c3b770475cf7" />
+---
 
 
+## 🛠️ Technology Stack
+
+| Layer               | Technology                                  |
+| ------------------- | ------------------------------------------- |
+| **Frontend**        | React 18, Vite, Tailwind CSS, Framer Motion |
+| **Backend**         | Flask, SQLAlchemy, Marshmallow, Gunicorn    |
+| **Database**        | PostgreSQL 15                               |
+| **AI Engine**       | Google Gemini (Generative AI API)           |
+| **Storage**         | Cloudinary (media files)                    |
+| **DevOps**          | Docker, Docker Compose                      |
+| **Auth & Security** | JWT, RBAC, SMTP OTP                         |
+
+---
 
 
-📄 License
+## 🧭 Application Flow (At a Glance)
 
-This project is licensed under the MIT License.
+This section provides a quick, end-to-end view of how users interact with **AI Vault**, from authentication to administrative control.
 
+---
+
+### 1️⃣ Authentication
+
+*Secure JWT-based login with password recovery and OTP verification.*
+
+<p align="center">
+  <img width="85%" alt="Authentication Page" src="./screenshots/auth-login.png" />
+</p>
+
+---
+
+### 2️⃣ User Dashboard
+
+*Central hub to upload, organize, and manage files with AI-generated metadata.*
+
+<p align="center">
+  <img width="90%" alt="User Dashboard" src="./screenshots/dashboard.png" />
+</p>
+
+---
+
+### 3️⃣ AI Chat & Document Analysis
+
+*Interact with uploaded documents using natural language (RAG-powered chat).*
+
+<p align="center">
+  <img width="90%" alt="AI-Chat" src="./screenshots/ai-chat.png" />
+</p>
+
+---
+
+### 4️⃣ Admin Console
+
+*Role-based access for managing users, permissions, and system oversight.*
+
+<p align="center">
+  <img width="90%" alt="Admin Console" src="./screenshots/admin-console.png" />
+</p>
+
+---
+
+### 🔁 Flow Summary
+
+```text
+Authenticate → Access Dashboard → Chat with Documents → (Admin Only) Manage Platform
+```
+
+---
+
+## 🚀 Getting Started (Docker)
+
+The entire stack runs using **Docker Compose**.
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/BhargavCodes/ai-vault.git
+cd ai-vault
+```
+
+---
+
+### 2️⃣ Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```ini
+# Core
+SECRET_KEY=your_secret_key
+DATABASE_URL=postgresql://user:password@db:5432/ai_vault
+
+# AI Services
+GEMINI_API_KEY=your_gemini_api_key
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Email (Gmail SMTP)
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USE_SSL=True
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_DEFAULT_SENDER=AI Vault Support <your_email@gmail.com>
+```
+
+---
+
+### 3️⃣ Run the Application
+
+```bash
+docker-compose up --build
+```
+
+**Access URLs:**
+
+* Frontend → `http://localhost:5173`
+* Backend → `http://localhost:5000`
+
+---
+
+## 👑 Admin Role Setup
+
+By default, all users are created with a `user` role.
+
+### Promote a User to Admin
+
+```bash
+docker exec -it ai-vault-db-1 psql -U user -d ai_vault
+```
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'your_email@gmail.com';
+```
+
+Logout and login again to access the **Admin Dashboard**.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+### 👨‍💻 Author
+
+**Bhargav Pawar**
+Computer Engineering • Backend & AI Enthusiast
+
+*Built with ❤️ and a focus on scalable, real-world engineering.*
+
+```

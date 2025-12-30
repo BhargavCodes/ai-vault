@@ -172,7 +172,7 @@ const Dashboard = () => {
                 {/* 🛡️ ADMIN BUTTON (Conditional Render) */}
                 {user?.role === 'admin' && (
                     <Link 
-                        to="/admin-dashboard" 
+                        to="/admin" 
                         className="flex items-center gap-2 px-4 py-3 rounded-xl font-bold bg-purple-100 text-purple-700 hover:bg-purple-200 transition dark:bg-purple-900/30 dark:text-purple-300"
                         title="Go to Admin Console"
                     >
