@@ -1,38 +1,50 @@
-// src/pages/AdminDashboard.jsx
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { Trash2, Shield, ShieldAlert, Search, User, ArrowLeft, Mail, Calendar } from 'lucide-react';
+import {
+  Trash2, Shield, ShieldAlert, Search, User, ArrowLeft,
+  Mail, Calendar, Users, X, ShieldCheck,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+
+const RoleBadge = ({ role }) => (
+  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider border ${
+    role === 'admin'
+      ? 'bg-violet-500/10 text-violet-400 border-violet-500/20'
+      : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
+  }`}>
+    {role === 'admin' ? <Shield size={9} /> : <User size={9} />}
+    {role}
+  </span>
+);
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const fetchUsers = async () => {
     try {
       const res = await api.get('/users?limit=100');
       setUsers(res.data.users);
-    } catch (err) {
-      toast.error("Failed to load users.");
+    } catch {
+      toast.error('Failed to load users.');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  useEffect(() => { fetchUsers(); }, []);
 
   const handleDelete = async (userId) => {
-    if (!confirm("Are you sure? This will delete the user and ALL their files.")) return;
+    if (!confirm('Delete this user and all their files?')) return;
     try {
       await api.delete(`/users/${userId}`);
-      setUsers(users.filter(u => u.id !== userId));
-      toast.success("User deleted.");
-    } catch (err) {
-      toast.error("Failed to delete user.");
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+      toast.success('User deleted.');
+    } catch {
+      toast.error('Failed to delete user.');
     }
   };
 
@@ -41,144 +53,232 @@ const AdminDashboard = () => {
     if (!confirm(`Change role to ${newRole}?`)) return;
     try {
       await api.put(`/auth/assign-role/${user.id}`, { role: newRole });
-      setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
+      setUsers((prev) => prev.map((u) => u.id === user.id ? { ...u, role: newRole } : u));
       toast.success(`Role updated to ${newRole}`);
-    } catch (err) {
-      toast.error("Failed to update role.");
+    } catch {
+      toast.error('Failed to update role.');
     }
   };
 
-  // ✅ Updated Filter: Searches Name OR Email
-  const filteredUsers = users.filter(u => 
-    (u.full_name || "").toLowerCase().includes(search.toLowerCase()) ||
-    (u.email || "").toLowerCase().includes(search.toLowerCase())
+  const filteredUsers = users.filter((u) =>
+    (u.full_name || '').toLowerCase().includes(search.toLowerCase()) ||
+    (u.email || '').toLowerCase().includes(search.toLowerCase())
   );
 
+  const adminCount = users.filter((u) => u.role === 'admin').length;
+
   return (
-    <div className="min-h-screen bg-gray-50 font-sans transition-colors duration-200 dark:bg-gray-900 dark:text-gray-100">
-      
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 dark:bg-gray-800 dark:border-gray-700">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-4">
-                <Link to="/dashboard" className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition dark:text-gray-300 dark:hover:bg-gray-700">
-                    <ArrowLeft size={20} />
-                </Link>
-                <div>
-                    <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2 dark:text-white">
-                        <ShieldAlert className="text-red-600 dark:text-red-500" /> Admin Console
-                    </h1>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Manage system users and permissions</p>
-                </div>
-            </div>
+    <div className="min-h-[80vh]">
+      {/* Page header */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="flex items-center justify-between mb-8"
+      >
+        <div className="flex items-center gap-3">
+          <Link
+            to="/dashboard"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.06] transition-all"
+          >
+            <ArrowLeft size={16} />
+          </Link>
+          <div>
+            <h1 className="font-display font-bold text-xl text-zinc-900 dark:text-white leading-none flex items-center gap-2">
+              <ShieldAlert size={18} className="text-rose-400" />
+              Admin Console
+            </h1>
+            <p className="font-mono text-[11px] text-zinc-400 dark:text-zinc-500 mt-0.5">Manage users and permissions</p>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      <main className="max-w-6xl mx-auto p-6">
-        
-        {/* Stats / Toolbar */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full md:w-auto dark:bg-gray-800 dark:border-gray-700">
-                <div className="bg-blue-100 p-3 rounded-lg text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                    <User size={24} />
-                </div>
-                <div>
-                    <p className="text-xs text-gray-500 uppercase font-bold dark:text-gray-400">Total Users</p>
-                    <p className="text-2xl font-bold text-gray-800 dark:text-white">{users.length}</p>
-                </div>
+      {/* Stats row */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6"
+      >
+        {[
+          { label: 'Total Users', value: users.length, icon: Users, color: 'text-indigo-400', bg: 'bg-indigo-500/8 border-indigo-500/15' },
+          { label: 'Admins', value: adminCount, icon: Shield, color: 'text-violet-400', bg: 'bg-violet-500/8 border-violet-500/15' },
+          { label: 'Regular Users', value: users.length - adminCount, icon: User, color: 'text-sky-400', bg: 'bg-sky-500/8 border-sky-500/15' },
+        ].map(({ label, value, icon: Icon, color, bg }, i) => (
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.08 + i * 0.06 }}
+            className="rounded-xl bg-white dark:bg-white/[0.03] border border-zinc-200/80 dark:border-white/[0.08] shadow-light-card dark:shadow-card p-4 flex items-center gap-3"
+          >
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center border ${bg} shrink-0`}>
+              <Icon size={16} className={color} />
             </div>
+            <div>
+              <p className="font-display font-bold text-xl text-zinc-900 dark:text-white leading-none">{value}</p>
+              <p className="font-mono text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mt-0.5">{label}</p>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
 
-            <div className="relative w-full md:w-96 group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
-                <input 
-                    type="text" 
-                    placeholder="Search name or email..." 
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-red-500 outline-none transition-all shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:bg-gray-700"
-                />
-            </div>
+      {/* Search & Table */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-2xl bg-white dark:bg-white/[0.03] border border-zinc-200/80 dark:border-white/[0.08] shadow-light-card dark:shadow-card overflow-hidden"
+      >
+        {/* Table toolbar */}
+        <div className="px-5 py-4 border-b border-zinc-100 dark:border-white/[0.06] flex items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-sm group">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-indigo-400 transition-colors" />
+            <input
+              type="text"
+              placeholder="Search name or email…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-9 py-2 text-sm rounded-xl
+                bg-zinc-100/80 dark:bg-white/[0.04]
+                border border-zinc-200/60 dark:border-white/[0.06]
+                text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600
+                focus:outline-none focus:ring-2 focus:ring-indigo-500/40
+                transition-all"
+            />
+            {search && (
+              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                <X size={12} />
+              </button>
+            )}
+          </div>
+          <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-600 shrink-0">
+            {filteredUsers.length} result{filteredUsers.length !== 1 ? 's' : ''}
+          </span>
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-            <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50 border-b border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-                        <tr>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">User Identity</th>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">DOB</th>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase dark:text-gray-400">Role</th>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase text-right dark:text-gray-400">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                        {loading ? (
-                            <tr><td colSpan="4" className="px-6 py-8 text-center text-gray-400">Loading users...</td></tr>
-                        ) : filteredUsers.length === 0 ? (
-                            <tr><td colSpan="4" className="px-6 py-8 text-center text-gray-400">No users found.</td></tr>
-                        ) : (
-                            filteredUsers.map(u => (
-                                <tr key={u.id} className="hover:bg-gray-50 transition dark:hover:bg-gray-700/50">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-                                                {u.profile_picture ? (
-                                                    <img src={u.profile_picture} className="w-full h-full object-cover" alt="avatar" />
-                                                ) : (
-                                                    <User size={20} className="text-gray-400 dark:text-gray-500" />
-                                                )}
-                                            </div>
-                                            <div>
-                                                {/* ✅ Shows Full Name */}
-                                                <p className="font-semibold text-gray-800 dark:text-gray-200">{u.full_name}</p>
-                                                {/* ✅ Shows Email */}
-                                                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    <Mail size={10} />
-                                                    {u.email}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    {/* ✅ Shows Date of Birth */}
-                                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar size={14} className="text-gray-400"/>
-                                            {u.dob || "N/A"}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold uppercase ${u.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300'}`}>
-                                            {u.role === 'admin' ? <Shield size={12} /> : <User size={12} />}
-                                            {u.role}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button 
-                                                onClick={() => toggleRole(u)}
-                                                className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition dark:hover:bg-purple-900/20 dark:hover:text-purple-300"
-                                                title="Toggle Role"
-                                            >
-                                                <Shield size={18} />
-                                            </button>
-                                            <button 
-                                                onClick={() => handleDelete(u.id)}
-                                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition dark:hover:bg-red-900/20 dark:hover:text-red-400"
-                                                title="Delete User"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-zinc-100 dark:border-white/[0.06]">
+                {['User', 'Date of Birth', 'Role', 'Actions'].map((h, i) => (
+                  <th key={h} className={`px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-600 ${i === 3 ? 'text-right' : ''}`}>
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                [...Array(5)].map((_, i) => (
+                  <tr key={i} className="border-b border-zinc-100/50 dark:border-white/[0.04]">
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/[0.04] animate-pulse" />
+                        <div className="space-y-1.5">
+                          <div className="h-3 w-24 bg-zinc-100 dark:bg-white/[0.04] rounded animate-pulse" />
+                          <div className="h-2.5 w-32 bg-zinc-100 dark:bg-white/[0.03] rounded animate-pulse" />
+                        </div>
+                      </div>
+                    </td>
+                    {[...Array(3)].map((_, j) => (
+                      <td key={j} className="px-5 py-4">
+                        <div className="h-3 w-16 bg-zinc-100 dark:bg-white/[0.04] rounded animate-pulse" />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-5 py-16 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <Users size={28} className="text-zinc-300 dark:text-zinc-700" />
+                      <p className="font-mono text-sm text-zinc-400 dark:text-zinc-600">No users found</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                <AnimatePresence>
+                  {filteredUsers.map((u, i) => (
+                    <motion.tr
+                      key={u.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25, delay: i * 0.03 }}
+                      className="border-b border-zinc-100/50 dark:border-white/[0.04] hover:bg-zinc-50 dark:hover:bg-white/[0.02] transition-colors group"
+                    >
+                      {/* User identity */}
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-indigo-500/15 to-violet-500/15 border border-white/10 dark:border-white/[0.06] flex items-center justify-center shrink-0">
+                            {u.profile_picture ? (
+                              <img src={u.profile_picture} className="w-full h-full object-cover" alt="avatar" />
+                            ) : (
+                              <span className="font-mono text-[10px] font-bold text-indigo-400">
+                                {(u.full_name || 'U').split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-display font-semibold text-sm text-zinc-800 dark:text-zinc-200 truncate">{u.full_name}</p>
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <Mail size={10} className="text-zinc-400 dark:text-zinc-600 shrink-0" />
+                              <p className="font-mono text-[10px] text-zinc-400 dark:text-zinc-600 truncate">{u.email}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* DOB */}
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar size={11} className="text-zinc-400 dark:text-zinc-600" />
+                          <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">{u.dob || 'N/A'}</span>
+                        </div>
+                      </td>
+
+                      {/* Role */}
+                      <td className="px-5 py-4">
+                        <RoleBadge role={u.role} />
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-5 py-4">
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            onClick={() => toggleRole(u)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg
+                              text-zinc-400 dark:text-zinc-600
+                              hover:text-violet-500 dark:hover:text-violet-400
+                              hover:bg-violet-500/10 dark:hover:bg-violet-500/8
+                              transition-all opacity-0 group-hover:opacity-100"
+                            title="Toggle role"
+                          >
+                            <ShieldCheck size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(u.id)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg
+                              text-zinc-400 dark:text-zinc-600
+                              hover:text-rose-500 dark:hover:text-rose-400
+                              hover:bg-rose-500/10 dark:hover:bg-rose-500/8
+                              transition-all opacity-0 group-hover:opacity-100"
+                            title="Delete user"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              )}
+            </tbody>
+          </table>
         </div>
-      </main>
+      </motion.div>
     </div>
   );
 };

@@ -5,10 +5,10 @@ import api from './api';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(() => !!localStorage.getItem('token'));
+  // Always start as true so we can check token on mount
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  // Helper to refresh user data without reloading page
   const refreshUser = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -31,8 +31,11 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('token');
           setUser(null);
         })
-        .finally(() => setLoading(false));
-    } 
+        .finally(() => setLoading(false)); // ✅ always resolves when token exists
+    } else {
+      // ✅ CRITICAL FIX: no token = no need to fetch, immediately done loading
+      setLoading(false);
+    }
   }, []);
 
   const login = async (email, password) => {

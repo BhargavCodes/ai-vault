@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, Eye, EyeOff } from 'lucide-react'; // Added Eye icons
+import { Eye, EyeOff, Sparkles, ArrowRight, Lock, Mail } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Login = () => {
-  // 1. Changed 'name' to 'email' to match backend
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  // UI States
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -20,96 +18,143 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-
     try {
-      // 2. Pass 'email' instead of 'name'
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to login');
+      setError(err.response?.data?.error || 'Invalid credentials');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200 dark:border-gray-700 transition-colors duration-200">
-        
-        <div className="text-center mb-8">
-          <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full w-fit mx-auto mb-4">
-            <LogIn className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
-          <p className="text-gray-500 text-sm dark:text-gray-400">Sign in to access your AI files</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-[#0a0a0f] px-4 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-grid-pattern-light dark:bg-grid-pattern pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-glow-indigo pointer-events-none" />
 
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm border border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          
-          {/* Email Input (Replaces Username) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Email Address</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
-              placeholder="john@example.com"
-            />
-          </div>
-
-          {/* Password Input with Toggle */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline dark:text-blue-400">
-                    Forgot Password?
-                </Link>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full max-w-sm z-10"
+      >
+        {/* Card */}
+        <div className="rounded-2xl bg-white dark:bg-white/[0.03] border border-zinc-200/80 dark:border-white/[0.08] shadow-light-card dark:shadow-glass p-8">
+          {/* Brand */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-glow-sm mb-4">
+              <Sparkles size={18} fill="white" className="text-white" />
             </div>
-            
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"} // Dynamic type
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400 pr-10"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            <h1 className="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1">Welcome back</h1>
+            <p className="text-sm text-zinc-400 dark:text-zinc-500 font-mono">Sign in to your AI Vault</p>
+          </div>
+
+          {/* Error */}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -8, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: 'auto' }}
+                exit={{ opacity: 0, y: -8, height: 0 }}
+                className="mb-5 px-4 py-3 rounded-xl bg-rose-500/8 dark:bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-mono overflow-hidden"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-2">
+                Email
+              </label>
+              <div className="relative">
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-600 pointer-events-none" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2.5 text-sm rounded-xl
+                    bg-zinc-100/80 dark:bg-white/[0.05]
+                    border border-zinc-200/80 dark:border-white/[0.08]
+                    text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400/50 dark:focus:border-indigo-500/40
+                    transition-all"
+                  placeholder="you@example.com"
+                />
+              </div>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full py-2.5 rounded-lg text-white font-semibold shadow-md transition-all 
-              ${isSubmitting ? 'bg-blue-400 cursor-not-allowed dark:bg-blue-600/50' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg dark:bg-blue-600 dark:hover:bg-blue-500'}`}
-          >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  Password
+                </label>
+                <Link to="/forgot-password" className="font-mono text-[11px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 transition-colors">
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="relative">
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-600 pointer-events-none" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-9 pr-10 py-2.5 text-sm rounded-xl
+                    bg-zinc-100/80 dark:bg-white/[0.05]
+                    border border-zinc-200/80 dark:border-white/[0.08]
+                    text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400/50 dark:focus:border-indigo-500/40
+                    transition-all"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
+              </div>
+            </div>
 
-        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-600 hover:underline font-medium dark:text-blue-400">
-            Sign up
-          </Link>
-        </p>
-      </div>
+            {/* Submit */}
+            <motion.button
+              type="submit"
+              disabled={isSubmitting}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold
+                bg-indigo-600 hover:bg-indigo-500 text-white
+                border border-indigo-500 shadow-glow-sm hover:shadow-glow-md
+                disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-2"
+            >
+              {isSubmitting ? (
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                />
+              ) : (
+                <>Sign in <ArrowRight size={14} /></>
+              )}
+            </motion.button>
+          </form>
+
+          {/* Footer */}
+          <p className="mt-6 text-center font-mono text-[11px] text-zinc-400 dark:text-zinc-600">
+            No account?{' '}
+            <Link to="/signup" className="text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
+              Sign up free
+            </Link>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };
